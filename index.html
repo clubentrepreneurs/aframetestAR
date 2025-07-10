@@ -120,7 +120,6 @@
     
     <div class="controls">
         <button id="ar-button">Mode AR</button>
-        
     </div>
 
     <audio id="success-audio" src="https://cdn.glitch.global/a7159fbc-3501-455e-b052-c328d6cf73fd/winning-218995.mp3?v=1742222282203"></audio>
@@ -130,14 +129,7 @@
             document.getElementById('viewer').activateAR();
         });
 
-        document.getElementById('vr-button').addEventListener('click', () => {
-            const viewer = document.getElementById('viewer');
-            if (navigator.xr) {
-                viewer.requestFullscreen();
-            } else {
-                alert("Mode VR non pris en charge sur cet appareil");
-            }
-        });
+        // Suppression du bouton VR et de son script
 
         function handleInteraction(choice) {
             const message = document.getElementById('response-message');
