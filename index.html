@@ -1,92 +1,40 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Three.js + AR.js (Cube AR)</title>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.2/three.js/build/ar.min.js"></script>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        font-family: sans-serif;
-      }
-      #ar-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="ar-container"></div>
-    <script>
-      // Initialise AR.js
-      const scene = new THREE.Scene();
-      const camera = new THREE.Camera();
-      scene.add(camera);
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0x000000, 0); // transparent
-      document.getElementById("ar-container").appendChild(renderer.domElement);
-
-      // Ajout d'AR.js controller (via marqueur)
-      const arToolkitSource = new THREEx.ArToolkitSource({ sourceType: 'webcam' });
-
-      arToolkitSource.init(() => {
-        setTimeout(() => {
-          onResize();
-        }, 2000);
-      });
-
-      window.addEventListener('resize', () => {
-        onResize();
-      });
-
-      function onResize() {
-        arToolkitSource.onResizeElement();
-        arToolkitSource.copyElementSizeTo(renderer.domElement);
-        if (arToolkitContext.arController !== null) {
-          arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
-        }
-      }
-
-      const arToolkitContext = new THREEx.ArToolkitContext({
-        cameraParametersUrl: 'https://cdn.jsdelivr.net/npm/ar.js@3.4.2/three.js/data/camera_para.dat',
-        detectionMode: 'mono',
-      });
-
-      arToolkitContext.init(() => {
-        camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
-      });
-
-      // Marqueur Hiro
-      const markerRoot = new THREE.Group();
-      scene.add(markerRoot);
-
-      const markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-        type: 'pattern',
-        patternUrl: 'https://cdn.jsdelivr.net/npm/ar.js@3.4.2/three.js/data/patt.hiro',
-        changeMatrixMode: 'modelViewMatrix',
-      });
-
-      // Cube rouge
-      const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-      const cubeMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0.8 });
-      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-      cube.position.y = 0.5;
-      markerRoot.add(cube);
-
-      // Boucle de rendu
-      function animate() {
-        requestAnimationFrame(animate);
-        if (arToolkitSource.ready) {
-          arToolkitContext.update(arToolkitSource.domElement);
-        }
-        renderer.render(scene, camera);
-      }
-
-      animate();
-    </script>
-  </body>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cube 3D en AR avec AR.js</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- Intégration de A-Frame et AR.js -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+  <style>
+    body, html { margin: 0; padding: 0; overflow: hidden; }
+    #ar-container { width: 100vw; height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="ar-container">
+    <!-- Scène AR.js avec A-Frame -->
+    <a-scene
+      embedded
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+      vr-mode-ui="enabled: false"
+      renderer="logarithmicDepthBuffer: true;"
+      style="width: 100vw; height: 100vh;"
+    >
+      <!-- Détection du marqueur Hiro (marqueur par défaut d'AR.js) -->
+      <a-marker preset="hiro">
+        <!-- Cube 3D -->
+        <a-box position="0 0.5 0" material="color: #4CC3D9; opacity: 0.8;"></a-box>
+      </a-marker>
+      <!-- Caméra -->
+      <a-entity camera></a-entity>
+    </a-scene>
+  </div>
+  <!-- Instructions pour l'utilisateur -->
+  <div style="position:fixed;top:10px;left:10px;z-index:10;color:white;background:rgba(0,0,0,0.5);padding:10px;border-radius:8px;">
+    Dirigez votre caméra vers le <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/aframe/examples/marker-training/examples/pattern-files/pattern-hiro.png" target="_blank" style="color:#4CC3D9;text-decoration:underline;">marqueur Hiro</a> pour voir le cube 3D en AR.<br>
+    (Vous pouvez l'imprimer ou l'afficher sur un autre écran)
+  </div>
+</body>
 </html>
