@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modèle GLTF en AR</title>
+    <title>Modèle GLTF animé en AR</title>
     <!-- Google Model Viewer -->
     <script type="module" src="https://unpkg.com/@google/model-viewer@latest"></script>
     <style>
@@ -44,11 +44,13 @@
     </style>
 </head>
 <body>
-    <!-- Modèle GLTF en AR -->
+    <!-- Modèle GLTF animé en AR -->
     <model-viewer
         id="ar-viewer"
         src="https://cdn.glitch.global/a7159fbc-3501-455e-b052-c328d6cf73fd/Parrot.glb?v=1742295774819"
-        alt="Modèle 3D en Réalité Augmentée"
+        alt="Modèle 3D animé en Réalité Augmentée"
+        autoplay
+        animation-name="*"
         ar
         ar-modes="webxr scene-viewer quick-look"
         camera-controls
