@@ -1,40 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Cube 3D en AR avec AR.js</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <!-- Intégration de A-Frame et AR.js -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-  <style>
-    body, html { margin: 0; padding: 0; overflow: hidden; }
-    #ar-container { width: 100vw; height: 100vh; }
-  </style>
-</head>
-<body>
-  <div id="ar-container">
-    <!-- Scène AR.js avec A-Frame -->
-    <a-scene
-      embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-      vr-mode-ui="enabled: false"
-      renderer="logarithmicDepthBuffer: true;"
-      style="width: 100vw; height: 100vh;"
-    >
-      <!-- Détection du marqueur Hiro (marqueur par défaut d'AR.js) -->
+  <head>
+    <title>Test AR.js Cube</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    <style>body,html{margin:0;padding:0;overflow:hidden;}</style>
+  </head>
+  <body>
+    <a-scene embedded arjs>
       <a-marker preset="hiro">
-        <!-- Cube 3D -->
-        <a-box position="0 0.5 0" material="color: #4CC3D9; opacity: 0.8;"></a-box>
+        <a-box position="0 0.5 0" material="color: red;"></a-box>
       </a-marker>
-      <!-- Caméra -->
       <a-entity camera></a-entity>
     </a-scene>
-  </div>
-  <!-- Instructions pour l'utilisateur -->
-  <div style="position:fixed;top:10px;left:10px;z-index:10;color:white;background:rgba(0,0,0,0.5);padding:10px;border-radius:8px;">
-    Dirigez votre caméra vers le <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/aframe/examples/marker-training/examples/pattern-files/pattern-hiro.png" target="_blank" style="color:#4CC3D9;text-decoration:underline;">marqueur Hiro</a> pour voir le cube 3D en AR.<br>
-    (Vous pouvez l'imprimer ou l'afficher sur un autre écran)
-  </div>
-</body>
+  </body>
 </html>
