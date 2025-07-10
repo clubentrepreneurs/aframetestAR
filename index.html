@@ -1,19 +1,70 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <title>Test AR.js Cube</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-    <style>body,html{margin:0;padding:0;overflow:hidden;}</style>
-  </head>
-  <body>
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-box position="1 0.5 0" material="color: red;"></a-box>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèle GLTF en AR</title>
+    <!-- Google Model Viewer -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        model-viewer {
+            width: 95vw;
+            max-width: 600px;
+            height: 80vh;
+            background: #222;
+            border-radius: 12px;
+        }
+        .controls {
+            margin-top: 16px;
+        }
+        button {
+            padding: 10px 22px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background: #fff;
+            color: #111;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #4CC3D9;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modèle GLTF en AR -->
+    <model-viewer
+        id="ar-viewer"
+        src="https://cdn.glitch.global/a7159fbc-3501-455e-b052-c328d6cf73fd/Parrot.glb?v=1742295774819"
+        alt="Modèle 3D en Réalité Augmentée"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        auto-rotate
+        poster="poster.jpg"
+        shadow-intensity="1"
+        xr-environment
+        style="background: #222;">
+    </model-viewer>
+    <div class="controls">
+        <button id="ar-button">Voir en AR</button>
+    </div>
+    <script>
+        document.getElementById('ar-button').addEventListener('click', () => {
+            document.getElementById('ar-viewer').activateAR();
+        });
+    </script>
+</body>
 </html>
