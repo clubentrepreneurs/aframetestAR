@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modèle GLTF animé en AR</title>
+    <title>Modèles GLTF animés en AR</title>
     <!-- Google Model Viewer -->
     <script type="module" src="https://unpkg.com/@google/model-viewer@latest"></script>
     <style>
@@ -17,18 +17,29 @@
             align-items: center;
             justify-content: center;
         }
+        .model-row {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100%;
+            margin-bottom: 16px;
+        }
         model-viewer {
-            width: 95vw;
-            max-width: 600px;
-            height: 80vh;
+            width: 44vw;
+            max-width: 320px;
+            height: 60vh;
             background: #222;
             border-radius: 12px;
         }
         .controls {
-            margin-top: 16px;
+            margin-top: 20px;
+            display: flex;
+            gap: 32px;
         }
         button {
-            padding: 10px 22px;
+            padding: 12px 28px;
             font-size: 16px;
             border: none;
             border-radius: 6px;
@@ -41,32 +52,54 @@
             background: #4CC3D9;
             color: #fff;
         }
+        .label {
+            text-align: center;
+            color: #fff;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-    <!-- Modèle GLTF animé en AR -->
-    <model-viewer
-        id="ar-viewer"
-        src="https://cdn.glitch.global/a7159fbc-3501-455e-b052-c328d6cf73fd/Parrot.glb?v=1742295774819"
-        alt="Modèle 3D animé en Réalité Augmentée"
-        autoplay
-        animation-name="*"
-        ar
-        ar-modes="webxr scene-viewer quick-look"
-        camera-controls
-        auto-rotate
-        poster="poster.jpg"
-        shadow-intensity="1"
-        xr-environment
-        style="background: #222;">
-    </model-viewer>
-    <div class="controls">
-        <button id="ar-button">Voir en AR</button>
+    <div class="model-row">
+        <div>
+            <div class="label">Perroquet animé</div>
+            <model-viewer
+                id="parrot-ar"
+                src="https://cdn.glitch.global/a7159fbc-3501-455e-b052-c328d6cf73fd/Parrot.glb?v=1742295774819"
+                alt="Perroquet animé"
+                autoplay
+                animation-name="*"
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                camera-controls
+                poster="poster.jpg"
+                shadow-intensity="1"
+                xr-environment
+                style="background: #222;">
+            </model-viewer>
+        </div>
+        <div>
+            <div class="label">Cylindre animé</div>
+            <model-viewer
+                id="cylinder-ar"
+                src="https://cdn.glitch.global/a7159fbc-3501-455e-b052-c328d6cf73fd/cube.glb?v=1742381097815"
+                alt="Cylindre animé"
+                autoplay
+                animation-name="*"
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                camera-controls
+                poster="poster.jpg"
+                shadow-intensity="1"
+                xr-environment
+                style="background: #222;">
+            </model-viewer>
+        </div>
     </div>
-    <script>
-        document.getElementById('ar-button').addEventListener('click', () => {
-            document.getElementById('ar-viewer').activateAR();
-        });
-    </script>
+    <div class="controls">
+        <button onclick="document.getElementById('parrot-ar').activateAR()">AR Perroquet</button>
+        <button onclick="document.getElementById('cylinder-ar').activateAR()">AR Cylindre</button>
+    </div>
 </body>
 </html>
