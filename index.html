@@ -1,22 +1,92 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Cube VR avec A-Frame</title>
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <title>Three.js + AR.js (Cube AR)</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.2/three.js/build/ar.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: sans-serif;
+      }
+      #ar-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
   </head>
   <body>
-    <a-scene>
-      <!-- Un cube positionné devant la caméra -->
-      <a-box position="0 1.6 -3" rotation="0 45 0" color="tomato"></a-box>
+    <div id="ar-container"></div>
+    <script>
+      // Initialise AR.js
+      const scene = new THREE.Scene();
+      const camera = new THREE.Camera();
+      scene.add(camera);
 
-      <!-- Sol pour référence visuelle -->
-      <a-plane rotation="-90 0 0" width="10" height="10" color="#7BC8A4"></a-plane>
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x000000, 0); // transparent
+      document.getElementById("ar-container").appendChild(renderer.domElement);
 
-      <!-- Lumière et caméra -->
-      <a-entity light="type: ambient; intensity: 0.5"></a-entity>
-      <a-entity light="type: directional; intensity: 0.8" position="1 1 0"></a-entity>
-      <a-entity camera position="0 1.6 0"></a-entity>
-    </a-scene>
+      // Ajout d'AR.js controller (via marqueur)
+      const arToolkitSource = new THREEx.ArToolkitSource({ sourceType: 'webcam' });
+
+      arToolkitSource.init(() => {
+        setTimeout(() => {
+          onResize();
+        }, 2000);
+      });
+
+      window.addEventListener('resize', () => {
+        onResize();
+      });
+
+      function onResize() {
+        arToolkitSource.onResizeElement();
+        arToolkitSource.copyElementSizeTo(renderer.domElement);
+        if (arToolkitContext.arController !== null) {
+          arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas);
+        }
+      }
+
+      const arToolkitContext = new THREEx.ArToolkitContext({
+        cameraParametersUrl: 'https://cdn.jsdelivr.net/npm/ar.js@3.4.2/three.js/data/camera_para.dat',
+        detectionMode: 'mono',
+      });
+
+      arToolkitContext.init(() => {
+        camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+      });
+
+      // Marqueur Hiro
+      const markerRoot = new THREE.Group();
+      scene.add(markerRoot);
+
+      const markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+        type: 'pattern',
+        patternUrl: 'https://cdn.jsdelivr.net/npm/ar.js@3.4.2/three.js/data/patt.hiro',
+        changeMatrixMode: 'modelViewMatrix',
+      });
+
+      // Cube rouge
+      const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const cubeMaterial = new THREE.MeshNormalMaterial({ transparent: true, opacity: 0.8 });
+      const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.position.y = 0.5;
+      markerRoot.add(cube);
+
+      // Boucle de rendu
+      function animate() {
+        requestAnimationFrame(animate);
+        if (arToolkitSource.ready) {
+          arToolkitContext.update(arToolkitSource.domElement);
+        }
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
   </body>
 </html>
